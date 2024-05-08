@@ -3,7 +3,6 @@
 //    - exercise/106_files.zig, or
 //    - create a file {project_root}/output/zigling.txt
 //      with content `It's zigling time!`(18 byte total)
-//
 // Now there no point in writing to a file if we don't read from it am I right?
 // let's wrote a program to read the content of the file that we just created.
 //
@@ -33,7 +32,7 @@ pub fn main() !void {
     // initalize an array of u8 with all letter 'A'.
     // we need to pick a size of the array, 64 seems like a good number.
     // fix the initalization below
-    var content = ['A']*64;
+    const content = [_]u8{'A'} ** 64;
     // this should print out : `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`
     std.debug.print("{s}\n", .{content});
 
@@ -41,12 +40,14 @@ pub fn main() !void {
     // can you go here to find a way to read the content ?
     // https://ziglang.org/documentation/master/std/#std.fs.File
     // hint: you might find two answer that are both vaild in this case
-    const byte_read = zig_read_the_file_or_i_will_fight_you(&content);
+    //
+    var buffer: [1024 * 4]u8 = undefined;
+    const byte_read = try file.read(buffer[0..buffer.len]);
 
     // Woah, too screamy, I know you're excited for zigling time but tone it down a bit
     // Can you print only what we read from the file ?
     std.debug.print("Successfully Read {d} byte: {s}\n", .{
         byte_read,
-        content, // change this line only
+        buffer[0..18], // change this line only
     });
 }
